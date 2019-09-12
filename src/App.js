@@ -1,26 +1,50 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from 'react'
+import './App.css'
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
+const ThemeContext = React.createContext({})
+
+const Demo = () => (
+  <ThemeContext.Consumer>
+    {({ theme, dispatch }) => (
+      <div className={`demo-background ${theme}`}>
+        <button
+          onClick={() => dispatch('TOGGLE_THEME')}
+          className="theme-button"
         >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+          {theme}
+        </button>
+      </div>
+    )}
+  </ThemeContext.Consumer>
+)
 
-export default App;
+class App extends React.Component {
+  state = {
+    theme: 'light',
+  }
+
+  dispatch = action => {
+    switch (action) {
+      case 'TOGGLE_THEME':
+        return this.setState(state => ({
+          theme: state.theme === 'light' ? 'dark' : 'light',
+        }))
+      default:
+        return this.state
+    }
+  }
+
+  render() {
+    return (
+      <ThemeContext.Provider
+        value={{
+          theme: this.state.theme,
+          dispatch: this.dispatch,
+        }}
+      >
+        <Demo />
+      </ThemeContext.Provider>
+    )
+  }
+}
+export default App
