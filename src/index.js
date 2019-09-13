@@ -1,52 +1,61 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import './App.css'
+import { Provider, connect } from 'react-redux'
+import { createStore, bindActionCreators } from 'redux'
 
-const ThemeContext = React.createContext({})
+const initialState = { theme: 'light' }
 
-const Demo = () => (
-  <ThemeContext.Consumer>
-    {({ theme, dispatch }) => (
-      <div className={`demo-background ${theme}`}>
-        <button
-          onClick={() => dispatch('TOGGLE_THEME')}
-          className="theme-button"
-        >
-          {theme}
-        </button>
-      </div>
-    )}
-  </ThemeContext.Consumer>
-)
-
-class App extends React.Component {
-  state = {
-    theme: 'light',
-  }
-
-  dispatch = action => {
-    switch (action) {
-      case 'TOGGLE_THEME':
-        return this.setState(state => ({
-          theme: state.theme === 'light' ? 'dark' : 'light',
-        }))
-      default:
-        return this.state
-    }
-  }
-
-  render() {
-    return (
-      <ThemeContext.Provider
-        value={{
-          theme: this.state.theme,
-          dispatch: this.dispatch,
-        }}
-      >
-        <Demo />
-      </ThemeContext.Provider>
-    )
+const themeReducer = (state = initialState, action) => {
+  switch (action.type) {
+    case 'TOGGLE_THEME':
+      return Object.assign({}, state, {
+        theme: state.theme === 'light' ? 'dark' : 'light',
+      })
+    default:
+      return state
   }
 }
 
-ReactDOM.render(<App />, document.getElementById('root'))
+const store = createStore(
+  themeReducer,
+  initialState
+  // log store and dispatch in the redux devtools
+  // window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+)
+
+const actions = {
+  toggleTheme: () => {
+    return {
+      type: 'TOGGLE_THEME',
+    }
+  },
+}
+
+const mapStateToProps = state => {
+  return { state: state }
+}
+
+const mapDispatchToProps = dispatch => {
+  return {
+    actions: bindActionCreators(actions, dispatch),
+  }
+}
+
+const Demo = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(({ state, actions }) => (
+  <div className={`demo-background ${state.theme}`}>
+    <button onClick={actions.toggleTheme} className="theme-button">
+      {state.theme}
+    </button>
+  </div>
+))
+
+ReactDOM.render(
+  <Provider store={store}>
+    <Demo />
+  </Provider>,
+  document.getElementById('root')
+)
