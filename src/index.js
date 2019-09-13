@@ -17,12 +17,7 @@ const themeReducer = (state = initialState, action) => {
   }
 }
 
-const store = createStore(
-  themeReducer,
-  initialState
-  // log store and dispatch in the redux devtools
-  // window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
-)
+const store = createStore(themeReducer)
 
 const actions = {
   toggleTheme: () => {
@@ -53,9 +48,10 @@ const Demo = connect(
   </div>
 ))
 
-ReactDOM.render(
+const App = () => (
   <Provider store={store}>
     <Demo />
-  </Provider>,
-  document.getElementById('root')
+  </Provider>
 )
+
+ReactDOM.render(<App />, document.getElementById('root'))
