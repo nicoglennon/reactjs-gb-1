@@ -2,50 +2,29 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import './App.css'
 
-const ThemeContext = React.createContext({})
-
-const Demo = () => (
-  <ThemeContext.Consumer>
-    {({ theme, dispatch }) => (
-      <div className={`demo-background ${theme}`}>
-        <button
-          onClick={() => dispatch('TOGGLE_THEME')}
-          className="theme-button"
-        >
-          {theme}
-        </button>
-      </div>
-    )}
-  </ThemeContext.Consumer>
-)
+const Demo = ({ theme, toggleTheme }) => {
+  return (
+    <div className={`demo-background ${theme}`}>
+      <button onClick={toggleTheme} className="theme-button">
+        {theme}
+      </button>
+    </div>
+  )
+}
 
 class App extends React.Component {
   state = {
     theme: 'light',
   }
 
-  dispatch = action => {
-    switch (action) {
-      case 'TOGGLE_THEME':
-        return this.setState(state => ({
-          theme: state.theme === 'light' ? 'dark' : 'light',
-        }))
-      default:
-        return this.state
-    }
+  toggleTheme = () => {
+    this.setState(state => ({
+      theme: state.theme === 'light' ? 'dark' : 'light',
+    }))
   }
 
   render() {
-    return (
-      <ThemeContext.Provider
-        value={{
-          theme: this.state.theme,
-          dispatch: this.dispatch,
-        }}
-      >
-        <Demo />
-      </ThemeContext.Provider>
-    )
+    return <Demo theme={this.state.theme} toggleTheme={this.toggleTheme} />
   }
 }
 
