@@ -9,9 +9,7 @@ const initialState = { theme: 'light' }
 const themeReducer = (state = initialState, action) => {
   switch (action.type) {
     case 'TOGGLE_THEME':
-      return Object.assign({}, state, {
-        theme: state.theme === 'light' ? 'dark' : 'light',
-      })
+      return { ...state, theme: state.theme === 'light' ? 'dark' : 'light' }
     default:
       return state
   }
@@ -21,9 +19,7 @@ const store = createStore(themeReducer)
 
 const actions = {
   toggleTheme: () => {
-    return {
-      type: 'TOGGLE_THEME',
-    }
+    return { type: 'TOGGLE_THEME' }
   },
 }
 
@@ -32,9 +28,7 @@ const mapStateToProps = state => {
 }
 
 const mapDispatchToProps = dispatch => {
-  return {
-    actions: bindActionCreators(actions, dispatch),
-  }
+  return { actions: bindActionCreators(actions, dispatch) }
 }
 
 const Demo = connect(
