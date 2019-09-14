@@ -1,8 +1,18 @@
-import React from 'react'
+import React, { useReducer } from 'react'
 import ReactDOM from 'react-dom'
 import './App.css'
 
 const ThemeContext = React.createContext({})
+const initialState = { theme: 'light' }
+
+const themeReducer = (state, action) => {
+  switch (action) {
+    case 'TOGGLE_THEME':
+      return { ...state, theme: state.theme === 'light' ? 'dark' : 'light' }
+    default:
+      return state
+  }
+}
 
 const Demo = () => (
   <ThemeContext.Consumer>
@@ -19,34 +29,19 @@ const Demo = () => (
   </ThemeContext.Consumer>
 )
 
-class App extends React.Component {
-  state = {
-    theme: 'light',
-  }
+const App = () => {
+  const [state, dispatch] = useReducer(themeReducer, initialState)
 
-  dispatch = action => {
-    switch (action) {
-      case 'TOGGLE_THEME':
-        return this.setState(state => ({
-          theme: state.theme === 'light' ? 'dark' : 'light',
-        }))
-      default:
-        return this.state
-    }
-  }
-
-  render() {
-    return (
-      <ThemeContext.Provider
-        value={{
-          theme: this.state.theme,
-          dispatch: this.dispatch,
-        }}
-      >
-        <Demo />
-      </ThemeContext.Provider>
-    )
-  }
+  return (
+    <ThemeContext.Provider
+      value={{
+        theme: state.theme,
+        dispatch: dispatch,
+      }}
+    >
+      <Demo />
+    </ThemeContext.Provider>
+  )
 }
 
 ReactDOM.render(<App />, document.getElementById('root'))
