@@ -3,7 +3,10 @@ import ReactDOM from 'react-dom'
 import './App.css'
 import { MgmtProvider, useMgmt } from './mgmt.js'
 
-const initialState = { theme: { current: 'light' }, text: { value: 'static' } }
+const initialState = {
+  theme: { current: 'light' },
+  text: { value: 'static' },
+}
 
 const rootReducer = ({ theme, text }, action) => {
   return {
