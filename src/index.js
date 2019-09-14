@@ -3,23 +3,38 @@ import ReactDOM from 'react-dom'
 import './App.css'
 import { MgmtProvider, useMgmt } from './mgmt.js'
 
-const initialState = { theme: 'light' }
+const initialState = { theme: { current: 'light' }, text: { value: 'static' } }
 
-const themeReducer = (state, action) => {
+const rootReducer = ({ theme, text }, action) => {
+  return {
+    theme: themeReducer(theme, action),
+    text: textReducer(text, action),
+  }
+}
+
+const themeReducer = (theme, action) => {
+  console.log(theme, action)
   switch (action) {
     case 'TOGGLE_THEME':
-      return { ...state, theme: state.theme === 'light' ? 'dark' : 'light' }
+      return { ...theme, current: theme.current === 'light' ? 'dark' : 'light' }
     default:
-      return state
+      return theme
+  }
+}
+
+const textReducer = (text, action) => {
+  switch (action) {
+    default:
+      return text
   }
 }
 
 const Demo = () => {
-  const [{ theme }, dispatch] = useMgmt()
+  const [{ theme, text }, dispatch] = useMgmt()
   return (
-    <div className={`demo-background ${theme}`}>
+    <div className={`demo-background ${theme.current}`}>
       <button onClick={() => dispatch('TOGGLE_THEME')} className="theme-button">
-        {theme}
+        {text.value}
       </button>
     </div>
   )
@@ -27,7 +42,7 @@ const Demo = () => {
 
 const App = () => {
   return (
-    <MgmtProvider reducer={themeReducer} initialState={initialState}>
+    <MgmtProvider reducer={rootReducer} initialState={initialState}>
       <Demo />
     </MgmtProvider>
   )
