@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom'
 import './App.css'
 
 const ThemeContext = React.createContext({})
+
 const initialState = { theme: 'light' }
 
 const themeReducer = (state, action) => {
@@ -15,7 +16,7 @@ const themeReducer = (state, action) => {
 }
 
 const Demo = () => {
-  const { theme, dispatch } = useContext(ThemeContext)
+  const [{ theme }, dispatch] = useContext(ThemeContext)
   return (
     <div className={`demo-background ${theme}`}>
       <button onClick={() => dispatch('TOGGLE_THEME')} className="theme-button">
@@ -26,15 +27,8 @@ const Demo = () => {
 }
 
 const App = () => {
-  const [state, dispatch] = useReducer(themeReducer, initialState)
-
   return (
-    <ThemeContext.Provider
-      value={{
-        theme: state.theme,
-        dispatch: dispatch,
-      }}
-    >
+    <ThemeContext.Provider value={useReducer(themeReducer, initialState)}>
       <Demo />
     </ThemeContext.Provider>
   )
