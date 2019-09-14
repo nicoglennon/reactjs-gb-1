@@ -1,8 +1,7 @@
-import React, { useReducer, useContext } from 'react'
+import React from 'react'
 import ReactDOM from 'react-dom'
 import './App.css'
-
-const ThemeContext = React.createContext({})
+import { MgmtProvider, useMgmt } from './mgmt.js'
 
 const initialState = { theme: 'light' }
 
@@ -16,7 +15,7 @@ const themeReducer = (state, action) => {
 }
 
 const Demo = () => {
-  const [{ theme }, dispatch] = useContext(ThemeContext)
+  const [{ theme }, dispatch] = useMgmt()
   return (
     <div className={`demo-background ${theme}`}>
       <button onClick={() => dispatch('TOGGLE_THEME')} className="theme-button">
@@ -28,9 +27,9 @@ const Demo = () => {
 
 const App = () => {
   return (
-    <ThemeContext.Provider value={useReducer(themeReducer, initialState)}>
+    <MgmtProvider reducer={themeReducer} initialState={initialState}>
       <Demo />
-    </ThemeContext.Provider>
+    </MgmtProvider>
   )
 }
 
