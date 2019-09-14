@@ -1,4 +1,4 @@
-import React, { useReducer } from 'react'
+import React, { useReducer, useContext } from 'react'
 import ReactDOM from 'react-dom'
 import './App.css'
 
@@ -14,20 +14,16 @@ const themeReducer = (state, action) => {
   }
 }
 
-const Demo = () => (
-  <ThemeContext.Consumer>
-    {({ theme, dispatch }) => (
-      <div className={`demo-background ${theme}`}>
-        <button
-          onClick={() => dispatch('TOGGLE_THEME')}
-          className="theme-button"
-        >
-          {theme}
-        </button>
-      </div>
-    )}
-  </ThemeContext.Consumer>
-)
+const Demo = () => {
+  const { theme, dispatch } = useContext(ThemeContext)
+  return (
+    <div className={`demo-background ${theme}`}>
+      <button onClick={() => dispatch('TOGGLE_THEME')} className="theme-button">
+        {theme}
+      </button>
+    </div>
+  )
+}
 
 const App = () => {
   const [state, dispatch] = useReducer(themeReducer, initialState)
