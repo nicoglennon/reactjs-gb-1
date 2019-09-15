@@ -2,11 +2,14 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import './App.css'
 import { MgmtProvider, useMgmt } from './mgmt.js'
+import api from './api'
 
 const initialState = { theme: 'light' }
 
-const themeReducer = (state, action) => {
-  switch (action) {
+const rootReducer = (state, action) => {
+  switch (action.type) {
+    case 'UPDATE_STATE':
+      return action.payload.newState
     case 'TOGGLE_THEME':
       return { ...state, theme: state.theme === 'light' ? 'dark' : 'light' }
     default:
@@ -16,9 +19,34 @@ const themeReducer = (state, action) => {
 
 const Demo = () => {
   const [{ theme }, dispatch] = useMgmt()
+
+  React.useEffect(() => {
+    const fetchState = async () => {
+      const state = await api.getState()
+      console.log(state)
+      if (state) {
+        dispatch({
+          type: 'UPDATE_STATE',
+          payload: {
+            newState: state,
+          },
+        })
+      }
+    }
+    fetchState()
+  }, [dispatch])
+
+  const toggleThemeHandler = async () => {
+    const themeChanged = await api.setTheme(
+      theme === 'light' ? 'dark' : 'light'
+    )
+    if (themeChanged) {
+      dispatch({ type: 'TOGGLE_THEME' })
+    }
+  }
   return (
     <div className={`demo-background ${theme}`}>
-      <button onClick={() => dispatch('TOGGLE_THEME')} className="theme-button">
+      <button onClick={toggleThemeHandler} className="theme-button">
         {theme}
       </button>
     </div>
@@ -27,7 +55,7 @@ const Demo = () => {
 
 const App = () => {
   return (
-    <MgmtProvider reducer={themeReducer} initialState={initialState}>
+    <MgmtProvider reducer={rootReducer} initialState={initialState}>
       <Demo />
     </MgmtProvider>
   )
