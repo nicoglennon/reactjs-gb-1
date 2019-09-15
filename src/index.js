@@ -4,7 +4,7 @@ import './App.css'
 import { MgmtProvider, useMgmt } from './mgmt.js'
 import api from './api'
 
-const initialState = { theme: 'light' }
+const initialState = { theme: 'light', loading: true }
 
 const rootReducer = (state, action) => {
   switch (action.type) {
@@ -18,12 +18,11 @@ const rootReducer = (state, action) => {
 }
 
 const Demo = () => {
-  const [{ theme }, dispatch] = useMgmt()
+  const [{ theme, loading }, dispatch] = useMgmt()
 
   React.useEffect(() => {
     const fetchState = async () => {
       const state = await api.getState()
-      console.log(state)
       if (state) {
         dispatch({
           type: 'UPDATE_STATE',
@@ -44,6 +43,11 @@ const Demo = () => {
       dispatch({ type: 'TOGGLE_THEME' })
     }
   }
+
+  if (loading) {
+    return <>Loading...</>
+  }
+
   return (
     <div className={`demo-background ${theme}`}>
       <button onClick={toggleThemeHandler} className="theme-button">
