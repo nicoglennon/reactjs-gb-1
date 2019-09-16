@@ -2,7 +2,7 @@ import React, { useReducer, useContext } from 'react'
 import ReactDOM from 'react-dom'
 import './App.css'
 
-const ThemeContext = React.createContext({})
+const ThemeContext = React.createContext()
 
 const initialState = { theme: 'light' }
 
@@ -27,8 +27,9 @@ const Demo = () => {
 }
 
 const App = () => {
+  const [state, dispatch] = useReducer(themeReducer, initialState)
   return (
-    <ThemeContext.Provider value={useReducer(themeReducer, initialState)}>
+    <ThemeContext.Provider value={[state, dispatch]}>
       <Demo />
     </ThemeContext.Provider>
   )
