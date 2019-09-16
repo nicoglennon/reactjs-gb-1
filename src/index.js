@@ -2,7 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import './App.css'
 
-const ThemeContext = React.createContext({})
+const ThemeContext = React.createContext()
 
 const Demo = () => (
   <ThemeContext.Consumer>
