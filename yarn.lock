@@ -8327,10 +8327,10 @@ react-is@^16.8.1, react-is@^16.8.4:
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.8.6.tgz#5bbc1e2d29141c9fbdfed456343fe2bc430a6a16"
   integrity sha512-aUk3bHfZ2bRSVFFbbeVS4i+lNPZr3/WM5jT2J5omUVV1zzcs1nAaf3l51ctA5FFvCRbhrH0bdAsRRQddFJZPtA==
 
-react-mgmt@^1.0.2:
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/react-mgmt/-/react-mgmt-1.0.2.tgz#f95f3433523d7a430b95eb4b9639ded3c1f3bf16"
-  integrity sha512-z+Z+tPy7No9WPjtMDoY98hDzJNzCmU0NM2KsoskzwAnDKlqcG/Kuld+YQNQfuJ4xASoneICjRU17i3IHt7IhLA==
+react-mgmt@^1.0.3:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/react-mgmt/-/react-mgmt-1.0.3.tgz#b748bbdb89c780e53b1e04d793fdcefe5f7bee59"
+  integrity sha512-CZo7Bk1GbeDhssZHKaYS47YSp/gYpwzikrt5vewiGlycK3oPPFVja5lfe6MR3/3XBIUKV+PBvn01cN3vSP45pQ==
 
 react-scripts@3.1.1:
   version "3.1.1"
