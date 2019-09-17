@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import ReactDOM from 'react-dom'
 import './App.css'
 import { MgmtProvider, useMgmt } from './mgmt.js'
@@ -17,32 +17,42 @@ const rootReducer = (state, action) => {
   }
 }
 
-const Demo = () => {
-  const [{ theme, loading }, dispatch] = useMgmt()
-
-  React.useEffect(() => {
-    const fetchState = async () => {
-      const state = await api.getState()
-      if (state) {
-        dispatch({
-          type: 'UPDATE_STATE',
-          payload: {
-            newState: state,
-          },
-        })
+const actions = {
+  updateState: async () => {
+    const updatedState = await api.getState()
+    if (updatedState) {
+      return {
+        type: 'UPDATE_STATE',
+        payload: {
+          newState: updatedState,
+        },
       }
     }
-    fetchState()
-  }, [dispatch])
-
-  const toggleThemeHandler = async () => {
+    return null
+  },
+  toggleTheme: async currentTheme => {
+    console.log(currentTheme)
     const themeChanged = await api.setTheme(
-      theme === 'light' ? 'dark' : 'light'
+      currentTheme === 'light' ? 'dark' : 'light'
     )
     if (themeChanged) {
-      dispatch({ type: 'TOGGLE_THEME' })
+      return { type: 'TOGGLE_THEME' }
     }
+    return null
+  },
+}
+
+const Demo = () => {
+  const [{ theme, loading }, mgmtActions] = useMgmt()
+
+  const toggleThemeHandler = () => {
+    mgmtActions.toggleTheme(theme)
   }
+  useEffect(() => {
+    if (loading) {
+      mgmtActions.updateState()
+    }
+  }, [loading, mgmtActions])
 
   if (loading) {
     return <>Loading...</>
@@ -59,7 +69,11 @@ const Demo = () => {
 
 const App = () => {
   return (
-    <MgmtProvider reducer={rootReducer} initialState={initialState}>
+    <MgmtProvider
+      reducer={rootReducer}
+      initialState={initialState}
+      actions={actions}
+    >
       <Demo />
     </MgmtProvider>
   )
